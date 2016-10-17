@@ -1,0 +1,26 @@
+{% include "header.html" %}
+    <div class="section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h1 class="text-center">Mail send to {{ peername }} ({{ asn }})</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section text-center">
+      <div class="background-image"></div>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <ul class="list-group">
+              <li class="list-group-item">To: {{ address }}</li>
+              <li class="list-group-item">Subject: {{ subject }}</li>
+              <li class="list-group-item">{{ message }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <center><form method="get" action="/"><button type="submit">Back</button></form></center>
+{% include "footer.html" %}

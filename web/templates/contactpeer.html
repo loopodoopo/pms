@@ -1,0 +1,30 @@
+{% include "header.html" %}
+<div class="section">
+      <div class="container">
+          <div class="col-md-12">
+            <h1 contenteditable="false" class="text-center">Contacting AS{{ peerasn }} - {{ peername }}</h1>
+          </div>
+        <div class="row">
+          <div class="col-md-12">
+            <form role="form" class="text-left" action="/mail" method="POST">
+              <div class="form-group">
+                <label class="control-label" for="exampleInputEmail1">Email address</label>
+                <input class="form-control" name="MailAddress" value="{% for address in mail %}{{ address }} {% endfor %}" placeholder="Enter email" type="text">
+              </div>
+              <div class="form-group">
+                <label class="control-label" for="exampleInputEmail1">Subject</label>
+                <input class="form-control" name="MailSubject" value="Peering request AS{{ peerasn }} - {{ peername }}" type="text">
+              </div>
+              <div class="form-group">
+                <textarea rows="12" name="MailMessage" value="" style="width: 100%">{% include "mail.tpl" %}</textarea>
+              </div>
+	        <input type="hidden" name="asn" value="{{ peerasn }}">
+	        <input type="hidden" name="name" value="{{ peername }}">
+                <button type="submit" class="btn btn-default"><i class="fa fa-envelope-o fa-fw"></i> Submit</button>
+		<form><input type="button" class="btn btn-default" value="back" onClick="history.go(-1);return true;"></form>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+{% include "footer.html" %}

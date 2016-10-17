@@ -1,0 +1,35 @@
+# Hibernia Networks - Peering Management System - 2016
+# Maikel de Boer - maikel.deboer@hibernianetworks.com
+
+#Run the software on the build in Flask server:
+export FLASK_APP=pms.py
+flask run --host=0.0.0.0
+
+#For real deployments please consult:
+http://flask.pocoo.org/docs/0.11/deploying/
+
+#web
+  This will contain all the code for the pms project.
+
+#config.cfg
+  Config file. Using the Python ConfigParser module to parse this config.
+
+#modules
+  Modules importable by for example pms.py. 
+
+#pdb.cache
+  Peeringdb cache file. Should go to /tmp in the future.
+
+#pms.py
+  Main file for this project. This is the route file and will handle all the requested URL's.
+
+#static
+  This folder contain static files like css and images.
+
+#templates
+  This directory will contain all the html templates to render the gui. mail.tpl is used to render the e-mail on the contact page.  
+  
+#templates/router
+  This directory will contain all the vendor specific router config in Jininja2 templates.
+
+

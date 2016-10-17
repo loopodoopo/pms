@@ -1,0 +1,129 @@
+{% include "header.html" %}
+    <div class="section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4 text-center">
+            <div class="btn-group btn-group-lg dropdown">
+              <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown">{{ '%s' % device if device else 'Device'}}<span class="fa fa-caret-down"></span></a>
+              <ul class="dropdown-menu" role="menu">
+	      {% for device in devices %}
+	        <li>
+	  	    <a href="/router?device={{ device[0] }}">{{ device[0] }}</a>
+		</li>
+	      {% endfor %}
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-4 text-center">
+            <div class="btn-group btn-group-lg">
+              <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown">{{ '%s' % ix if ix else 'IX'}}<span class="fa fa-caret-down"></span></a>
+              <ul class="dropdown-menu" role="menu">
+	      {% for ix in ixes if not ix[1] == "No IX found" %}
+                <li>
+	 	    <a href="/ixdetails?device={{ device }}&ixname={{ ix[1] }}">{{ ix[1] }}</a>
+		</li>
+	      {% endfor %}
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-4 text-center">
+            <div class="btn-group btn-group-lg">
+              <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown">{{ '%s' % status if status else 'Status'}}<span class="fa fa-caret-down"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                {% if ix %}  
+                <li>
+		<a href="/ixdetails/configured?device={{ device }}&ixname={{ ix }}&config=yes">Configured</a>
+                </li>
+                <li>
+                  <a href="/ixdetails/notconfigured?device={{ device }}&ixname={{ ix }}&config=no">Not configured</a>
+		</li>
+                {% endif %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+	    {% if asn %}
+	    <h1 class="text-center">{{ asn }} {{ name }} {{ ix }}</h1>
+	    {% endif %}
+            {% for ix in ixes if ix[1] == "No IX found" %}
+	    <h2 class="text-center" style="color:red;">{{ ix[1] }} on {{ device }}</h2>
+	    {% endfor %}
+	    {% if data %}
+            <table class="table">
+              <thead>
+                <tr>
+                  <th style="width:100%">Description</th>
+                  <th>ASN</th>
+                  <th>IP</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+	      {% endif %}
+		{% for row in data %}
+                <tr>
+                  <td>{{ row[2] }}</td>
+                  <td>{{ row[1] }}</td>
+		  {% if status == 'Configured' %}
+                  <td>{{ row[3] }}</td>
+		  {% endif %}
+		  {% if status == 'Not Configured' %}
+		  <td>{{ row[3] if row[3] != None else row[4] }}</td>
+		  {% endif %}
+                  <td style="white-space:nowrap">
+                    <div class="col-md-8 text-left">
+		      {% if status == 'Configured' %}
+                      <a href="/delete?peerasn={{ row[1] }}&peerip={{ row[3] }}&device={{ device }}&peergroup={{ row[4] }}&peername={{ row [2] }}&ixname={{ ix }}"><i class="fa fa-2x fa-trash fa-fw"></i></a>
+
+		      {% endif %}	
+		      {% if status == 'Not Configured' %}
+                      <a href="/contactpeer?peerasn={{ row[1] }}&peername={{ row[2] }}&asn={{ asn }}&localname={{ name }}&localas={{ asn }}&ix={{ ix }}"><i class="fa fa-2x fa-envelope-o fa-fw"></i></a>
+		      {% endif %}	
+                      <a target="_blank" href="https://peeringdb.com/asn/{{ row[1] }}"><i class="fa fa-2x s fa-fw fa-info"></i></a>
+                      {% if status == 'Configured' %}
+		      <form style="display: inline-block" role="form" action="/update" method="GET">
+                      <input class="" id="maxpfx" type="text" placeholder="Max PFX limit" name="pfxlimit" value="{{ row[5] }}">
+                      <input class="" id="md5" type="text" placeholder="MD5" name="md5" value="{{ row[6] }}">
+                      <input type="hidden" name="peername" value="{{ row[2] }}"/>
+                      <input type="hidden" name="peerasn" value="{{ row[1] }}"/>
+                      <input type="hidden" name="peerip" value="{{ row[3] }}"/>
+                      <input type="hidden" name="device" value="{{ device }}"/>
+                      <input type="hidden" name="ixname" value="{{ ix }}"/>
+                      <input type="hidden" name="peergroup" value="{{ row[4] }}"/>
+		      <button type="submit" class="btn btn-default">Update</button>
+                      </form>
+                      {% endif %}
+	   	      {% if status == 'Not Configured' %}
+                      <form id="selector" class="btn-group btn-group-sm" role="form" action="/configure" method="GET">
+                      <input class="" id="maxpfx" type="text" placeholder="Max PFX limit" name="pfxlimit" value="{{ row[5] }}">
+                      <input class="" id="md5" type="text" placeholder="MD5" name="md5" value="{{ row[6] }}">
+		      <input type="hidden" name="peername" value="{{ row[2] }}"/>
+		      <input type="hidden" name="peerasn" value="{{ row[1] }}"/>
+		      <input type="hidden" name="peerip" value="{{ row[3] }}"/>
+		      <input type="hidden" name="device" value="{{ device }}"/>
+		      <input type="hidden" name="ixname" value="{{ ix }}"/>
+		      <select class="dropdown-toggle" onchange="document.getElementById('selector').submit()" name="peergroup">
+		      {% for item in peergroups %}
+			<option value="{{ item }}">{{ item }}</option>
+		      {% endfor %}
+		      </select>
+                      </form>
+		      {% endif %}
+                    </div>
+                  </td>
+                </tr>
+		{% endfor %}
+             </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+{% include "footer.html" %}
+

@@ -1,0 +1,27 @@
+{% include "header.html" %}
+    <div class="section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h1 class="text-center">Unconfigured {{ peername }} on {{ ix }}</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section text-center">
+      <div class="background-image"></div>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <ul class="list-group">
+              <li class="list-group-item">Name: {{ peername }}</li>
+              <li class="list-group-item">ASN: {{ peerasn }}</li>
+              <li class="list-group-item">Peerip: {{ peerip }}</li>
+              <li class="list-group-item">IX: {{ ix }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <center><form method="get" action="/"><button type="submit">Back</button></form></center>
+{% include "footer.html" %}
